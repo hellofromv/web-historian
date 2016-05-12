@@ -27,7 +27,16 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(callback) {
+  console.log('the directory', __dirname);
+  console.log('the readfilesyncasdasdasd-------------', fs.readFileSync(path.join(__dirname, '../archives/sites.txt'), 'utf8'));
+  fs.readFileSync(path.join(__dirname, '../archives/sites.txt'), 'utf8');
+
+  // retrieves the data from the example txt files & returns it into an array
+  // have to join it on \n
+
+  // invoke callback on that array
+
 
 };
 

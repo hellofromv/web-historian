@@ -18,7 +18,7 @@ exports.serveAssets = function(req, res, asset, callback) {
   var home = '/';
   var url = req.url;
   var urlInput;
-
+  
   if (req.method === 'GET') {
     if (url === home) {
       fs.readFile(archive.paths.index, (err, data) => {
@@ -54,6 +54,7 @@ exports.serveAssets = function(req, res, asset, callback) {
     req.on('end', function() {
       urlInput = qs.parse(body);
       urlInput = urlInput.url + '\n';
+    
       archive.addUrlToList(archive.paths.list, urlInput, 'utf8', (err) => {
         if (err) {
           console.log('we have error', err);
@@ -64,8 +65,9 @@ exports.serveAssets = function(req, res, asset, callback) {
         }
       });
     });
+      
   }
-
+  
 
 };
 
