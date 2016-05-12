@@ -38,13 +38,6 @@ exports.readListOfUrls = function(callback) {
       callback(newArray);
     }
   });
-
-  // retrieves the data from the example txt files & returns it into an array
-  // have to join it on \n
-
-  // invoke callback on that array
-
-
 };
 
 exports.isUrlInList = function(target, callback) {
@@ -53,31 +46,30 @@ exports.isUrlInList = function(target, callback) {
       console.log('we got an error for isUrlInList', err);     
     } else {
       var newArray = data.split('\n');
-      callback();
-      newArray.forEach(function(item) {
-        return (target === item) ? true : false;//callback(true) : callback(false);
-      });
+      return (newArray.indexOf(target) > -1) ? callback(true) : callback(false);
     }
   });
 };
-//
-// exports.addUrlToList = function(thepath, theurl, encoding, callback) {
-//   fs.appendFile(thepath, theurl, encoding, callback);
-// };
+
 
 exports.addUrlToList = function(someurl, callback) {
-  // fs.appendFile(exports.paths.list, someurl + '\n', 'utf8', (err) => { callback(); });
   exports.isUrlInList(someurl, () => {
-    fs.appendFile(exports.paths.list, someurl + '\n', 'utf8', callback);
+    fs.appendFile(exports.paths.list, someurl + '\n', 'utf8', (err) => {
+      console.log('error in appending file:', err);
+      callback();
+    });
   });
-  // fs.readFile(exports.path.list, 'utf8', (err, data) => {
-  //   if ()
-  // });
 };
 
-// };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(someurl, callback) {
+  fs.readdir(exports.paths.archivedSites, (err, filesArr) => {
+    if (err) {
+      console.log('we got an error for isURLARCHIVED!!!!!!', err);     
+    } else {
+      return (filesArr.indexOf(someurl) > -1) ? callback(true) : callback(false);
+    }
+  });
 };
 
 exports.downloadUrls = function() {

@@ -59,7 +59,7 @@ exports.serveAssets = function(req, res, asset, callback) {
         if (err) {
           console.log('we have error', err);
         } else {
-          console.log('append success'); 
+          console.log('append success!!!!!!!!!!!!!!!!!!'); 
           res.writeHead(302);
           res.end();
         }
