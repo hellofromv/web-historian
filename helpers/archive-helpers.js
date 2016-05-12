@@ -33,7 +33,6 @@ exports.readListOfUrls = function(callback) {
     if (err) {
       console.log('we have an ', err);
     } else {
-      console.log('the data is a buffer', data);
       var newArray = data.split('\n');
       console.log('the value of newarray', newArray);
       callback(newArray);
@@ -48,12 +47,35 @@ exports.readListOfUrls = function(callback) {
 
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(target, callback) {
+  fs.readFile(exports.paths.list, 'utf8', (err, data) => {
+    if (err) {
+      console.log('we got an error for isUrlInList', err);     
+    } else {
+      var newArray = data.split('\n');
+      callback();
+      newArray.forEach(function(item) {
+        return (target === item) ? true : false;//callback(true) : callback(false);
+      });
+    }
+  });
+};
+//
+// exports.addUrlToList = function(thepath, theurl, encoding, callback) {
+//   fs.appendFile(thepath, theurl, encoding, callback);
+// };
+
+exports.addUrlToList = function(someurl, callback) {
+  // fs.appendFile(exports.paths.list, someurl + '\n', 'utf8', (err) => { callback(); });
+  exports.isUrlInList(someurl, () => {
+    fs.appendFile(exports.paths.list, someurl + '\n', 'utf8', callback);
+  });
+  // fs.readFile(exports.path.list, 'utf8', (err, data) => {
+  //   if ()
+  // });
 };
 
-exports.addUrlToList = function(thepath, theurl, encoding, callback) {
-  fs.appendFile(thepath, theurl, encoding, callback);
-};
+// };
 
 exports.isUrlArchived = function() {
 };
