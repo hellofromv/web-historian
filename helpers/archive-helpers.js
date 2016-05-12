@@ -72,5 +72,25 @@ exports.isUrlArchived = function(someurl, callback) {
   });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(arrayOfUrl) {
+  var thePath = exports.paths.archivedSites;
+  console.log('#1 ----array OF url', arrayOfUrl);
+  fs.readdir(thePath, (err, files) => {
+    console.log('array OF url', arrayOfUrl);
+    console.log('FILESSSSSSS:', files);
+    // 
+    arrayOfUrl.forEach((item) => {
+      if (files.indexOf(item) === -1) {
+        fs.writeFile(thePath + '/' + item, item, (err) => {
+          if (err) {
+            console.log('downloaduRL errrr', err);
+          } else {
+            console.log('write Success');
+          }
+        });
+      }
+    });
+  });
 };
+  
+      
