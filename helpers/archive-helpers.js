@@ -28,9 +28,17 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
-  console.log('the directory', __dirname);
-  console.log('the readfilesyncasdasdasd-------------', fs.readFileSync(path.join(__dirname, '../archives/sites.txt'), 'utf8'));
-  fs.readFileSync(path.join(__dirname, '../archives/sites.txt'), 'utf8');
+  
+  fs.readFile(exports.paths.list, 'utf8', (err, data) => {
+    if (err) {
+      console.log('we have an ', err);
+    } else {
+      console.log('the data is a buffer', data);
+      var newArray = data.split('\n');
+      console.log('the value of newarray', newArray);
+      callback(newArray);
+    }
+  });
 
   // retrieves the data from the example txt files & returns it into an array
   // have to join it on \n
