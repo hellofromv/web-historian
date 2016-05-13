@@ -26,7 +26,6 @@ exports.serveAssets = function(req, res, asset, callback) {
         if (err) {
           console.log(err);
         } else {
-          console.log('heyo!');
           res.writeHead(200);
           res.end(data);
         }
@@ -56,26 +55,42 @@ exports.serveAssets = function(req, res, asset, callback) {
       urlInput = qs.parse(body);
       urlInput = urlInput.url;
         
-      if (!archive.isUrlArchived(urlInput, () => {})) {
-        archive.addUrlToList(urlInput, (err) => {
-          if (err) {
-            console.log('we have error', err);
-          } else {
-            console.log('3append success!!!!!!!!!!!!!!!!!'); 
-            res.writeHead(200);
-           
-          }
-        });
-        fs.readFile(archive.paths.loading, (err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('heyo!');
-            res.writeHead(302);
+      archive.isUrlArchived(urlInput, (result) => {
+        if (result === false) { 
+          console.log('YOU SHOULDN\'T BE HERE', result); 
+          archive.addUrlToList(urlInput, (err) => {
+            if (err) {
+              console.log('we have error', err);
+            } else {
+              console.log('3append success!!!!!!!!!!!!!!!!!'); 
+              res.writeHead(200);
+             
+            }
+          });
+          fs.readFile(archive.paths.loading, (err, data) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('heyo!');
+              res.writeHead(302);
+            }
+            res.end(data); 
+          });
+        } else if (result === true) {
+          console.log('BOOOOOOOO');
+          fs.readFile(archive.paths.archivedSites + '/' + urlInput, (err, data) => {
+            console.log('archiveSAVED SITE', archive.paths.archivedSites + '/' + urlInput);
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('heyo!');
+              res.writeHead(302);
+              res.write(data);
+            }
             res.end(); 
-          }
-        });
-      }
+          });
+        }
+      });
     });
   }
 };
