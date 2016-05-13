@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 var qs = require('querystring');
+var request = require('request');
 
 exports.headers = {
   'access-control-allow-origin': '*',
@@ -47,28 +48,36 @@ exports.serveAssets = function(req, res, asset, callback) {
   
     var body = '';
     req.on('data', function(data) {
-      console.log('the data is-----------', data);
+      console.log('1the data is-----------', data);
       body += data;
     });
 
     req.on('end', function() {
       urlInput = qs.parse(body);
       urlInput = urlInput.url;
-    
-      archive.addUrlToList(urlInput, (err) => {
-        if (err) {
-          console.log('we have error', err);
-        } else {
-          console.log('append success!!!!!!!!!!!!!!!!!!'); 
-          res.writeHead(302);
-          res.end();
-        }
-      });
+        
+      if (!archive.isUrlArchived(urlInput, () => {})) {
+        archive.addUrlToList(urlInput, (err) => {
+          if (err) {
+            console.log('we have error', err);
+          } else {
+            console.log('3append success!!!!!!!!!!!!!!!!!'); 
+            res.writeHead(200);
+           
+          }
+        });
+        fs.readFile(archive.paths.loading, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('heyo!');
+            res.writeHead(302);
+            res.end(); 
+          }
+        });
+      }
     });
-
   }
-  
-
 };
 
 
